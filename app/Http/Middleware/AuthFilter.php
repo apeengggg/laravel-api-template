@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use App\Utils\ResponseUtil;
+use App\Models\Users;
 
 class AuthFilter
 {
@@ -44,11 +45,19 @@ class AuthFilter
 
         try {
             $decoded = JWT::decode($token, new Key($this->key, 'HS256'));
-            dd($decoded);
+            $data = $decoded->data;
 
-            $request->attributes->set('user_id', $decoded->user_id);
-
-            return $next($request);
+            $user = Users::getUserFromUserId($data->user_id);
+            if($user && $user->role_id != $data->role_id){
+                return ResponseUtil::Unauthorized(null, 'Token is not valid because role has been changed');
+            }else if($user){
+                $request->attributes->set('name', $user->name);
+                $request->attributes->set('user_id', $user->user_id);
+                $request->attributes->set('role_id', $user->role_id);
+                return $next($request);
+            }else{
+                return ResponseUtil::Unauthorized(null, 'User does not exist anymore');
+            }
         } catch (\Exception $e) {
             return ResponseUtil::Unauthorized(null, 'Token is not valid');
         }

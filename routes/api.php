@@ -2,8 +2,8 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\UsersApiController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\UserApiController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -20,11 +20,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::prefix('v1')->group(function () {
-    Route::prefix('users')->group(function () {
-        Route::get('/', [UsersApiController::class, 'index']);
-        Route::post('/', [UsersApiController::class, 'store']);
-        Route::put('/', [UsersApiController::class, 'update']);
-        Route::delete('/', [UsersApiController::class, 'delete']);
+    Route::middleware(['auth.filter', 'permission.filter'])->prefix('users')->group(function () {
+        Route::get('/', [UserApiController::class, 'index']);
+        Route::post('/', [UserApiController::class, 'store']);
+        Route::put('/', [UserApiController::class, 'update']);
+        Route::delete('/', [UserApiController::class, 'delete']);
     });
 
     Route::prefix('auth')->group(function () {

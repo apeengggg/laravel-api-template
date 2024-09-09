@@ -23,4 +23,19 @@ class Permissions extends Model
 
         return $data;
     }
+
+    public static function getPermissionByFunctionAndRoleId($function_id, $role_id){
+        return DB::table('m_permissions_laravel as p')
+        ->join('m_functions_laravel as f', 'f.function_id', '=', 'p.function_id')
+        ->select('p.create_permission as allowCreate',
+                    'p.read_permission as allowRead',
+                    'p.update_permission as allowUpdate',
+                    'p.delete_permission as allowDelete',
+                    'p.function_id',
+                    'f.function_name'
+        )
+        ->where('p.role_id', $role_id)
+        ->where('p.function_id', $function_id)
+        ->first();
+    }
 }

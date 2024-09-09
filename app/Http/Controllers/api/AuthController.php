@@ -48,6 +48,11 @@ class AuthController extends Controller
 
             $object_permission = PermissionUtil::createObjectPermission($permission);
 
+            $payload_data = [
+                'user_id' => $results->user_id,
+                'role_id' => $results->role_id
+            ];
+
             $results = [
                 'user_id' => $results->user_id,
                 'name' => $results->name,
@@ -55,7 +60,7 @@ class AuthController extends Controller
                 'role_id' => $results->role_id,
                 'role_name' => $results->role_name,
                 'permission' => $object_permission,
-                'token' => $this->jwtUtil->generateToken($results->user_id, $results->role_id),
+                'token' => $this->jwtUtil->generateToken($payload_data, $results->role_id),
             ];
 
 

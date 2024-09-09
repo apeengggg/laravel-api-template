@@ -22,4 +22,12 @@ class Users extends Model
         ->where('u.email', $email)
         ->first();
     } 
+
+    public static function getUserFromUserId($user_id){
+        return DB::table('m_users_laravel as u')
+        ->join('m_roles_laravel as r', 'u.role_id', '=', 'r.role_id')
+        ->select('u.user_id', 'u.name', 'u.email', 'u.password', 'u.role_id', 'r.role_name', 'u.photo')
+        ->where('u.user_id', $user_id)
+        ->first();
+    } 
 }
