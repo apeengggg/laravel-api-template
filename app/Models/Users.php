@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Users extends Model
 {
@@ -13,4 +14,12 @@ class Users extends Model
         "user_id", "role_id", "nip", "name", "email", "phone", "password", "status", "photo",
         "created_dt", "created_by", "updated_dt", "updated_by"
     ];
+
+    public static function getUserFromEmail($email){
+        return DB::table('m_users_laravel as u')
+        ->join('m_roles_laravel as r', 'u.role_id', '=', 'r.role_id')
+        ->select('u.user_id', 'u.name', 'u.email', 'u.password', 'u.role_id', 'r.role_name', 'u.photo')
+        ->where('u.email', $email)
+        ->first();
+    } 
 }

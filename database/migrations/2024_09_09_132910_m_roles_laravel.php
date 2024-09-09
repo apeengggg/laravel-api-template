@@ -19,8 +19,8 @@ class MRolesLaravel extends Migration
             $table->string('role_name', 50);
             $table->timestamp('created_dt')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->string('created_by', 100);
-            $table->timestamp('updated_dt');
-            $table->string('updated_by', 100);
+            $table->timestamp('updated_dt')->nullable();
+            $table->string('updated_by', 100)->nullable();
         });
     }
 

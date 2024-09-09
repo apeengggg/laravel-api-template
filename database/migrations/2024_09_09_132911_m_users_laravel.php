@@ -19,8 +19,8 @@ class MUsersLaravel extends Migration
             $table->string('password', 255);
             $table->timestamp('created_dt')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->string('created_by', 100);
-            $table->timestamp('updated_dt');
-            $table->string('updated_by', 100);
+            $table->timestamp('updated_dt')->nullable();
+            $table->string('updated_by', 100)->nullable();
             $table->integer('status')->default(1);
             $table->text('photo');
 

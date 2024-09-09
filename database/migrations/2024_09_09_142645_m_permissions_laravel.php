@@ -24,8 +24,8 @@ class MPermissionsLaravel extends Migration
             $table->integer('delete_permission');
             $table->timestamp('created_dt')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->string('created_by', 100);
-            $table->timestamp('updated_dt');
-            $table->string('updated_by', 100);
+            $table->timestamp('updated_dt')->nullable();
+            $table->string('updated_by', 100)->nullable();
 
             // Foreign key constraints
             $table->foreign('role_id')->references('role_id')->on('m_roles_laravel')->onDelete('cascade');
