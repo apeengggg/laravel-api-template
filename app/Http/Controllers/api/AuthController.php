@@ -10,6 +10,8 @@ use App\Utils\ResponseUtil;
 use App\Utils\PermissionUtil;
 use Illuminate\Support\Facades\Hash;
 use App\Utils\JwtUtil;
+use App\Utils\StringUtil;
+use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
@@ -28,8 +30,23 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
-        //
         try{
+            $validator = Validator::make($request->all(), [
+                'email' => 'required|email'  ,
+                'password' => 'required|string|min:4'
+            ],[
+                'email.required' => 'Email is Required',
+                'password.required' => 'Password is Required',
+                'password.string' => 'Password Must Be String',
+                'password.min' => 'Password Must Be At Least 8 Character'
+            ]);
+    
+            //Send failed response if request is not valid
+            if ($validator->fails()) {
+                $errorMessages = StringUtil::ErrorMessage($validator);
+                return ResponseUtil::BadRequest(null, $errorMessages);
+            }
+
             $results = Users::getUserFromEmail($request->email);
             if($results == null){
                 return ResponseUtil::Unauthorized(null, "Login failed, either your User Id isn't registered in our system or your password is incorrect");

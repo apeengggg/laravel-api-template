@@ -15,10 +15,6 @@ use App\Http\Controllers\Api\UserApiController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
 Route::prefix('v1')->group(function () {
     Route::middleware(['auth.filter', 'permission.filter'])->prefix('users')->group(function () {
         Route::get('/', [UserApiController::class, 'index']);
