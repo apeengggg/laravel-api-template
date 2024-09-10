@@ -84,7 +84,6 @@ class AuthController extends Controller
             return ResponseUtil::Ok(null, "Successfully Get Users", $results);
         }catch(\Exception $e){
             return ResponseUtil::InternalServerError(null, $e);
-
         }
     }
 
