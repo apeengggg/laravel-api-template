@@ -20,7 +20,7 @@ Route::prefix('v1')->group(function () {
         Route::get('/', [UserApiController::class, 'index']);
         Route::post('/', [UserApiController::class, 'store']);
         Route::put('/', [UserApiController::class, 'update']);
-        Route::delete('/', [UserApiController::class, 'delete']);
+        Route::delete('/', [UserApiController::class, 'destroy']);
     });
 
     Route::prefix('auth')->group(function () {

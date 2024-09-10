@@ -31,10 +31,15 @@ class Users extends Model
         ->first();
     }
 
+    public static function deleteUser($user_id){
+        return DB::table('m_users_laravel as u')->where('user_id', $user_id)->update(['status' => 0]);
+    }
+
     public static function getUsers($param){
         $query = DB::table('m_users_laravel as u')
                 ->join('m_roles_laravel as r', 'u.role_id', '=', 'r.role_id')
-                ->select('u.user_id', 'u.role_id', 'u.nip', 'u.name', 'u.email', 'u.phone', 'u.photo', 'u.status', 'r.role_name');
+                ->select('u.user_id', 'u.role_id', 'u.nip', 'u.name', 'u.email', 'u.phone', 'u.photo', 'u.status', 'r.role_name')
+                ->where('u.status', 1);
 
         if($param->userId){
             $query = $query->where('u.user_id', $param->userId);
