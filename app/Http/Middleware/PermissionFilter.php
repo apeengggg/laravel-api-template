@@ -43,10 +43,10 @@ class PermissionFilter
             }
 
             if(!$hasAccess || !$permission){
-                return ResponseUtil::Forbidden(null, 'Access Denied');
+                return ResponseUtil::Forbidden('Access Denied');
             }
         }else{
-            return ResponseUtil::Forbidden(null, 'Access Denied');
+            return ResponseUtil::Forbidden('Access Denied');
         }
 
         return $next($request);

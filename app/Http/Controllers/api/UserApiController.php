@@ -8,6 +8,7 @@ use App\Utils\ResponseUtil;
 use App\Models\Users;
 use App\Utils\StringUtil;
 use Illuminate\Support\Facades\Validator;
+use Ramsey\Uuid\Uuid;
 
 class UserApiController extends Controller
 {
@@ -51,13 +52,13 @@ class UserApiController extends Controller
             //Send failed response if request is not valid
             if ($validator->fails()) {
                 $errorMessages = StringUtil::ErrorMessage($validator);
-                return ResponseUtil::BadRequest(null, $errorMessages);
+                return ResponseUtil::BadRequest($errorMessages);
             }
     
             $results = Users::getUsers($request);
-            return ResponseUtil::Ok(null, "Successfully Get Data", $results);
+            return ResponseUtil::Ok("Successfully Get Data", $results);
         }catch(\Exception $e){
-            return ResponseUtil::InternalServerError(null, $e);
+            return ResponseUtil::InternalServerError($e);
         }
     }
 
@@ -70,6 +71,12 @@ class UserApiController extends Controller
     public function store(Request $request)
     {
         //
+        try{
+            $user_id =  Uuid::uuid4()->toString();
+            return ResponseUtil::Ok('Successfully created', []);
+        }catch(\Exception $e){
+            return ResponseUtil::InternalServerError($e);
+        }
     }
 
     /**
@@ -80,7 +87,7 @@ class UserApiController extends Controller
      */
     public function show($id)
     {
-        //
+        
     }
 
     /**
@@ -90,9 +97,14 @@ class UserApiController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        try{
+            
+            return ResponseUtil::Ok('Successfully created', []);
+        }catch(\Exception $e){
+            return ResponseUtil::InternalServerError($e);
+        }
     }
 
     /**
@@ -115,18 +127,18 @@ class UserApiController extends Controller
             //Send failed response if request is not valid
             if ($validator->fails()) {
                 $errorMessages = StringUtil::ErrorMessage($validator);
-                return ResponseUtil::BadRequest(null, $errorMessages);
+                return ResponseUtil::BadRequest($errorMessages);
             }
             
             $get_user = Users::getUserFromUserId($request->userId);
             if(!$get_user){
-                return ResponseUtil::BadRequest(null, 'Bad Request');
+                return ResponseUtil::BadRequest('Bad Request');
             }
             
             Users::deleteUser($request->userId);
-            return ResponseUtil::Ok(null, 'Successfully Deleted', null);
+            return ResponseUtil::Ok('Successfully Deleted', null);
         }catch(\Exception $e){
-            return ResponseUtil::InternalServerError(null, $e);
+            return ResponseUtil::InternalServerError($e);
         }
     }
 }

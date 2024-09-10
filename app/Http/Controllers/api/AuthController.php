@@ -44,23 +44,23 @@ class AuthController extends Controller
             //Send failed response if request is not valid
             if ($validator->fails()) {
                 $errorMessages = StringUtil::ErrorMessage($validator);
-                return ResponseUtil::BadRequest(null, $errorMessages);
+                return ResponseUtil::BadRequest($errorMessages);
             }
 
             $results = Users::getUserFromEmail($request->email);
             if($results == null){
-                return ResponseUtil::Unauthorized(null, "Login failed, either your User Id isn't registered in our system or your password is incorrect");
+                return ResponseUtil::Unauthorized("Login failed, either your User Id isn't registered in our system or your password is incorrect");
             }
 
             $compare = Hash::check($request->password, $results->password);
             if(!$compare){
-                return ResponseUtil::Unauthorized(null, "Login failed, either your User Id isn't registered in our system or your password is incorrect");
+                return ResponseUtil::Unauthorized("Login failed, either your User Id isn't registered in our system or your password is incorrect");
             }
 
             $permission = Permissions::getPermissionById($results->role_id);
             // echo $permission;
             if(!$permission){
-                return ResponseUtil::Unauthorized(null, "Login failed, either your User Id isn't registered in our system or your password is incorrect");
+                return ResponseUtil::Unauthorized("Login failed, either your User Id isn't registered in our system or your password is incorrect");
             }
 
             $object_permission = PermissionUtil::createObjectPermission($permission);
@@ -81,9 +81,9 @@ class AuthController extends Controller
             ];
 
 
-            return ResponseUtil::Ok(null, "Successfully Get Users", $results);
+            return ResponseUtil::Ok("Successfully Get Users", $results);
         }catch(\Exception $e){
-            return ResponseUtil::InternalServerError(null, $e);
+            return ResponseUtil::InternalServerError($e);
         }
     }
 

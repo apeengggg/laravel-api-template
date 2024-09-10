@@ -40,7 +40,7 @@ class AuthFilter
         $token = $request->bearerToken();
 
         if (!$token) {
-            return ResponseUtil::Unauthorized(null, 'Token not provided');
+            return ResponseUtil::Unauthorized('Token not provided');
         }
 
         try {
@@ -49,17 +49,17 @@ class AuthFilter
 
             $user = Users::getUserFromUserId($data->user_id);
             if($user && $user->role_id != $data->role_id){
-                return ResponseUtil::Unauthorized(null, 'Token is not valid because role has been changed');
+                return ResponseUtil::Unauthorized('Token is not valid because role has been changed');
             }else if($user){
                 $request->attributes->set('name', $user->name);
                 $request->attributes->set('user_id', $user->user_id);
                 $request->attributes->set('role_id', $user->role_id);
                 return $next($request);
             }else{
-                return ResponseUtil::Unauthorized(null, 'User does not exist anymore');
+                return ResponseUtil::Unauthorized('User does not exist anymore');
             }
         } catch (\Exception $e) {
-            return ResponseUtil::Unauthorized(null, 'Token is not valid');
+            return ResponseUtil::Unauthorized('Token is not valid');
         }
     }
 }
